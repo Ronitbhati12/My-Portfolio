@@ -307,3 +307,70 @@ button.glass-btn:hover {
 [data-theme="light"] body {
   transition: background-color 0.8s ease, color 0.8s ease;
 }
+
+/* ============ RESPONSIVE MEDIA QUERIES ============ */
+@media (max-width: 768px) {
+  /* Global typography adjustments */
+  h1 { font-size: clamp(2.5rem, 8vw, 4rem) !important; }
+  h2 { font-size: clamp(2rem, 7vw, 3.5rem) !important; }
+  h3 { font-size: clamp(1.5rem, 5vw, 2.5rem) !important; }
+  p { font-size: clamp(0.9rem, 4vw, 1.1rem) !important; }
+
+  /* Utility classes for mobile stacking and padding */
+  .mobile-col {
+    flex-direction: column !important;
+  }
+  .mobile-col-reverse {
+    flex-direction: column-reverse !important;
+  }
+  
+  /* Manifesto Cards Mobile Tweaks */
+  .manifesto-card-container {
+    flex-direction: column-reverse !important;
+    gap: 1.5rem !important;
+    height: auto !important;
+    min-height: 80vh !important;
+    justify-content: center !important;
+  }
+  .manifesto-text-panel {
+    padding: 1.5rem !important;
+  }
+  .manifesto-image-panel {
+    height: 35vh !important;
+    min-height: 250px !important;
+  }
+
+  /* Projects Horizontal Scroll adjustments */
+  .project-track {
+    padding: 0 5vw !important;
+    gap: 1.5rem !important;
+  }
+  .project-card {
+    width: 85vw !important;
+    height: 60vh !important;
+    max-height: 500px !important;
+  }
+  .project-intro-card {
+    width: 85vw !important;
+  }
+  
+  /* App Padding Adjustments */
+  .mobile-section-padding {
+    padding: 10vh 5vw !important;
+  }
+
+  /* Contact Grid */
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 3rem !important;
+  }
+
+  /* Hide custom cursor on touch devices */
+  .cursor-dot, .cursor-outline {
+    display: none !important;
+  }
+  body, a, button {
+    cursor: auto !important;
+  }
+}
+

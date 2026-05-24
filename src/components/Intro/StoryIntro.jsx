@@ -158,7 +158,7 @@ export default function StoryIntro({ onComplete }) {
             exit={{ opacity: 0 }}
             style={{ 
               fontFamily: '"Times New Roman", Times, serif', 
-              fontSize: '2rem',
+              fontSize: 'clamp(1.2rem, 5vw, 2rem)',
               position: 'absolute',
               inset: 0,
               display: 'flex',
@@ -182,7 +182,7 @@ export default function StoryIntro({ onComplete }) {
             transition={{ duration: 1.2 }}
             style={{
               fontFamily: '"Times New Roman", Times, serif',
-              fontSize: '2.6rem',
+              fontSize: 'clamp(1.5rem, 6vw, 2.6rem)',
               textAlign: 'center',
               maxWidth: '75%',
               whiteSpace: 'pre-line',
@@ -379,7 +379,7 @@ export default function StoryIntro({ onComplete }) {
                 }}
                 style={{
                   fontFamily: '"Cinzel", "Didot", "Playfair Display", serif',
-                  fontSize: '9vw',
+                  fontSize: 'clamp(3rem, 10vw, 8rem)',
                   fontWeight: 900,
                   textTransform: 'uppercase',
                   letterSpacing: '-0.05em',

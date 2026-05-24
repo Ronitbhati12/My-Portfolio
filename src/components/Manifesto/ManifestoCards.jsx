@@ -211,6 +211,7 @@ export default function ManifestoCards() {
             <div
               key={i}
               ref={(el) => (cardRefs.current[i] = el)}
+              className="manifesto-card-container"
               style={{
                 position:   'absolute',
                 width:      'min(1100px, 90vw)',
@@ -223,6 +224,7 @@ export default function ManifestoCards() {
             >
               {/* Glass text panel */}
               <div
+                className="manifesto-text-panel"
                 style={{
                   flex:                '1',
                   padding:             '3.5rem',
@@ -301,6 +303,7 @@ export default function ManifestoCards() {
 
               {/* Image panel */}
               <div
+                className="manifesto-image-panel"
                 style={{
                   flex:         '1',
                   height:       '85%',

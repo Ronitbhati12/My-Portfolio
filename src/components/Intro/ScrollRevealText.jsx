@@ -45,7 +45,7 @@ export default function ScrollRevealText({ text, className = '', style = {} }) {
       className={`scroll-reveal-text ${className}`}
       style={{
         lineHeight: 1.6,
-        fontSize: '2.5rem',
+        fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
         fontWeight: 400,
         color: 'var(--color-text-luxury)',
         maxWidth: '900px',

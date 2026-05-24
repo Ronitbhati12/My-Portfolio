@@ -103,6 +103,7 @@ export default function ProjectGallery3D() {
         {/* Horizontal Moving Track */}
         <div
           ref={trackRef}
+          className="project-track"
           style={{
             display: 'flex',
             gap: '3.5rem',
@@ -113,7 +114,7 @@ export default function ProjectGallery3D() {
           }}
         >
           {/* Introductory Card */}
-          <div style={{
+          <div className="project-intro-card" style={{
             width: '350px',
             flexShrink: 0,
             display: 'flex',
@@ -155,6 +156,7 @@ export default function ProjectGallery3D() {
               style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
             >
             <AppleCard
+              className="project-card"
               style={{
                 width: '450px',
                 height: '520px',

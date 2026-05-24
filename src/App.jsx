@@ -112,7 +112,7 @@ function MainSite() {
       <main ref={containerRef} style={{ position: 'relative', zIndex: 10, overflow: 'hidden', transition: 'color 0.6s ease' }}>
         
         {/* ================= CHAPTER ONE: HERO ================= */}
-        <section style={{ height: '100vh', padding: '0 8vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
+        <section className="mobile-section-padding" style={{ height: '100vh', padding: '0 8vw', display: 'flex', flexDirection: 'column', justifyContent: 'center', position: 'relative' }}>
           <motion.div style={{ y: heroY, opacity: heroOpacity }}>
            
             <motion.h1 
@@ -147,7 +147,7 @@ function MainSite() {
 
 
         {/* ================= CHAPTER TWO: THE PHILOSOPHY ================= */}
-        <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '0 8vw', position: 'relative', borderTop: '1px solid var(--color-border)' }}>
+        <section className="mobile-section-padding" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '0 8vw', position: 'relative', borderTop: '1px solid var(--color-border)' }}>
           <div style={{ position: 'absolute', top: '10%', left: '8vw' }}>
         
           </div>
@@ -163,7 +163,7 @@ function MainSite() {
 
 
         {/* ================= CHAPTER THREE: THE CRAFT (BENTO GRID) ================= */}
-        <section style={{ minHeight: '120vh', padding: '15vh 8vw', position: 'relative', borderTop: '1px solid var(--color-border)' }}>
+        <section className="mobile-section-padding" style={{ minHeight: '120vh', padding: '15vh 8vw', position: 'relative', borderTop: '1px solid var(--color-border)' }}>
           <div style={{ marginBottom: '5rem' }}>
             <h2 className="text-gradient-luxury" style={{ fontSize: '3.5vw', textTransform: 'uppercase', letterSpacing: '-0.02em', lineHeight: 1 }}>
               Designing systems that feel alive.
@@ -180,7 +180,7 @@ function MainSite() {
 
 
         {/* ================= CHAPTER FIVE: THE CREATIVE PROCESS ================= */}
-        <section style={{ minHeight: '120vh', padding: '15vh 8vw', position: 'relative', borderTop: '1px solid var(--color-border)' }}>
+        <section className="mobile-section-padding" style={{ minHeight: '120vh', padding: '15vh 8vw', position: 'relative', borderTop: '1px solid var(--color-border)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             
             {/* Header */}
@@ -326,8 +326,8 @@ function MainSite() {
 
 
         {/* ================= CHAPTER SIX: CONTACT ================= */}
-        <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '10vh 8vw', position: 'relative', borderTop: '1px solid var(--color-border)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '4rem', alignItems: 'center', width: '100%' }}>
+        <section className="mobile-section-padding" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '10vh 8vw', position: 'relative', borderTop: '1px solid var(--color-border)' }}>
+          <div className="contact-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '4rem', alignItems: 'center', width: '100%' }}>
             
             {/* Text details */}
             <div>
