@@ -192,7 +192,7 @@ function MainSite() {
             </div>
 
             {/* Split timeline content */}
-            <div style={{
+            <div className="timeline-container" style={{
               display: 'flex',
               flexDirection: 'column',
               gap: '6rem',
@@ -517,8 +517,6 @@ export default function App() {
         <>
           <Cursor />
           <LivingBackground />
-          <ThemeToggle />
-          
           {!introFinished ? (
              <StoryIntro onComplete={() => setIntroFinished(true)} />
           ) : (
@@ -528,6 +526,7 @@ export default function App() {
                transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
                style={{ position: 'relative', zIndex: 5 }}
              >
+                <ThemeToggle />
                 <MainSite />
              </motion.div>
           )}

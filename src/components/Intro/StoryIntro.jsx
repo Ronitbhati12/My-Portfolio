@@ -256,8 +256,8 @@ export default function StoryIntro({ onComplete }) {
               }}
               style={{
                 position: 'absolute',
-                width: '900px',
-                height: '900px',
+                width: 'min(200vw, 900px)',
+                height: 'min(200vw, 900px)',
                 borderRadius: '50%',
                 background:
                   'radial-gradient(circle, rgba(63,114,175,0.3), transparent 70%)',
@@ -346,8 +346,8 @@ export default function StoryIntro({ onComplete }) {
                 }}
                 style={{
                   position: 'absolute',
-                  width: '600px',
-                  height: '600px',
+                  width: 'min(150vw, 600px)',
+                  height: 'min(150vw, 600px)',
                   borderRadius: '50%',
                   border: '1px solid var(--color-border)',
                 }}
@@ -362,8 +362,8 @@ export default function StoryIntro({ onComplete }) {
                 }}
                 style={{
                   position: 'absolute',
-                  width: '750px',
-                  height: '750px',
+                  width: 'min(180vw, 750px)',
+                  height: 'min(180vw, 750px)',
                   borderRadius: '50%',
                   border: '1px dashed var(--color-border)',
                 }}
@@ -448,8 +448,8 @@ export default function StoryIntro({ onComplete }) {
                 }}
                 style={{
                   position: 'absolute',
-                  width: '420px',
-                  height: '420px',
+                  width: 'min(100vw, 420px)',
+                  height: 'min(100vw, 420px)',
                 }}
               >
                 <div

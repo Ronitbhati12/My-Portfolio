@@ -70,22 +70,29 @@ export default function ProjectGallery3D() {
       return -(trackWidth - windowWidth);
     };
 
-    const scrollTween = gsap.to(track, {
-      x: getScrollAmount,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: container,
-        pin: true,
-        start: 'top top',
-        end: () => `+=${track.scrollWidth - window.innerWidth}`,
-        scrub: 1, // Inertia scrub for buttery smooth movement
-        invalidateOnRefresh: true, // Recalculate on screen resize
-      }
-    });
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+    let scrollTween;
+    if (!isMobile) {
+      scrollTween = gsap.to(track, {
+        x: getScrollAmount,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: container,
+          pin: true,
+          start: 'top top',
+          end: () => `+=${track.scrollWidth - window.innerWidth}`,
+          scrub: 1, // Inertia scrub for buttery smooth movement
+          invalidateOnRefresh: true, // Recalculate on screen resize
+        }
+      });
+    }
 
     return () => {
-      scrollTween.scrollTrigger?.kill();
-      scrollTween.kill();
+      if (scrollTween) {
+        scrollTween.scrollTrigger?.kill();
+        scrollTween.kill();
+      }
     };
   }, []);
 
@@ -103,7 +110,7 @@ export default function ProjectGallery3D() {
         {/* Horizontal Moving Track */}
         <div
           ref={trackRef}
-          className="project-track"
+          className="project-track mobile-native-scroll"
           style={{
             display: 'flex',
             gap: '3.5rem',
