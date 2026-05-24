@@ -5,6 +5,8 @@ import AppleCard from '../Cards/AppleCard';
 import { ArrowUpRight, ExternalLink } from 'lucide-react';
 import bhatiJewelsImg from '../../assets/bhatijewels.png';
 import dragImg from '../../assets/drag.png';
+import vastrrImg from '../../assets/vastrr.png';
+import musicdbImg from '../../assets/musicdb.jpeg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,7 +19,7 @@ const projects = [
     image: bhatiJewelsImg,
     tags: ['React', 'Tailwind CSS', 'JavaScript', 'Responsive UI'],
     link: '#',
-    github: '#'
+    github: 'https://github.com/Ronitbhati12/bhati_jwels'
   },
   {
     id: 2,
@@ -27,27 +29,27 @@ const projects = [
     image: dragImg,
     tags: ['React', 'Drag & Drop', 'CSS Animations', 'JavaScript'],
     link: '#',
-    github: '#'
+    github: 'https://github.com/Ronitbhati12/Drag_Clothing'
   },
   {
     id: 3,
     title: 'Vastrrr',
     type: 'Fashion Platform / React / Tailwind CSS',
     description: 'A dynamic fashion discovery platform with category filtering, responsive product grids, and a sleek dark-mode interface built for the modern shopper.',
-    image: 'https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=800&auto=format&fit=crop',
+    image: vastrrImg,
     tags: ['React', 'Tailwind CSS', 'REST API', 'Responsive Design'],
     link: '#',
-    github: '#'
+    github: 'https://github.com/Ronitbhati12/Vastrr'
   },
   {
     id: 4,
-    title: 'Hand Gesture',
-    type: 'Computer Vision / Python / ML',
-    description: 'A real-time hand gesture recognition system using computer vision. Detects and classifies gestures through a live webcam feed — bridging physical movement and digital control.',
-    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=800&auto=format&fit=crop',
-    tags: ['Python', 'OpenCV', 'MediaPipe', 'Machine Learning'],
+    title: 'MusicDB',
+    type: 'Music Platform / SQL / CSS',
+    description: 'Developed a music rating and review web platform inspired by IMDb. Designed responsive and modern UI with CSS animations and implemented search and database-driven content using SQL.',
+    image: musicdbImg,
+    tags: ['SQL', 'CSS Animations', 'Database', 'UI Design'],
     link: '#',
-    github: '#'
+    github: 'https://github.com/Ronitbhati12/MusicDB'
   }
 ];
 
@@ -145,12 +147,19 @@ export default function ProjectGallery3D() {
 
           {/* Project Cards */}
           {projects.map((project) => (
-            <AppleCard
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
               key={project.id}
+              style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+            >
+            <AppleCard
               style={{
                 width: '450px',
                 height: '520px',
-                flexShrink: 0
+                flexShrink: 0,
+                cursor: 'pointer'
               }}
             >
               <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
@@ -264,17 +273,14 @@ export default function ProjectGallery3D() {
                     ))}
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.8rem' }}>
-                    <a href={project.github} className="interactive" style={{ color: 'var(--color-text-muted)', transition: 'color 0.3s' }}>
-                      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                    </a>
-                    <a href={project.link} className="interactive" style={{ color: 'var(--color-text-muted)', transition: 'color 0.3s' }}>
-                      <ExternalLink size={16} />
-                    </a>
+                  <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--color-text-muted)" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block' }}><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    <ExternalLink size={16} color="var(--color-text-muted)" />
                   </div>
                 </div>
               </div>
             </AppleCard>
+            </a>
           ))}
 
           {/* Outro/End Card */}
@@ -304,16 +310,18 @@ export default function ProjectGallery3D() {
             }}>
               I am constantly building new projects and pushing my frontend skills further. Let's create something together.
             </p>
-            <button className="glass-btn interactive" style={{
+            <a href="https://github.com/repos?q=owner%3A%40me" target="_blank" rel="noopener noreferrer" className="glass-btn interactive" style={{
               padding: '0.8rem 1.8rem',
               borderRadius: '30px',
               fontSize: '0.8rem',
               textTransform: 'uppercase',
               letterSpacing: '0.15em',
-              width: 'fit-content'
+              width: 'fit-content',
+              textDecoration: 'none',
+              color: 'inherit'
             }}>
               View GitHub
-            </button>
+            </a>
           </div>
         </div>
       </div>

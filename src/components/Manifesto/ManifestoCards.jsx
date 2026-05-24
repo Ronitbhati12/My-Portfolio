@@ -1,9 +1,11 @@
-import { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { User, Crosshair, Code2, Brain, Hammer, Paintbrush, Flame } from 'lucide-react';
-import ronitImg from '../../assets/ronit.jpg';
-import whoAmIImg from '../../assets/2.png';
+
+// ── Keep your local imports ──────────────────────────────────────────────────
+import ronitImg    from '../../assets/ronit.jpg';
+import whoAmIImg   from '../../assets/2.png';
 import whatIKnowImg from '../../assets/download (3).jfif';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -67,63 +69,81 @@ const manifesto = [
   },
 ];
 
+// Each card occupies 2 timeline units: 1 for transition-in, 1 for hold.
+// Last card gets an extra hold. Total = (N-1)*2 + 2 = N*2
+const UNIT        = 1;
+const TOTAL       = manifesto.length;
+const TL_DURATION = TOTAL * 2 * UNIT; // used only as reference for progress math
+
 export default function ManifestoCards() {
-  const [active, setActive] = useState(0);
-  const sectionRef = useRef(null);
-  const cardRefs = useRef([]);
+  const [active, setActive]   = useState(0);
+  const sectionRef            = useRef(null);
+  const cardRefs              = useRef([]);
 
   useEffect(() => {
     const el = sectionRef.current;
-    if (!el || !cardRefs.current.length) return;
+    if (!el) return;
 
-    const TOTAL = manifesto.length;
+    // ── Initial states ────────────────────────────────────────────────────────
+    // All cards: hidden, translated down. No scale — avoids GPU jank with scrub.
+    gsap.set(cardRefs.current, { opacity: 0, y: 50, pointerEvents: 'none' });
+    gsap.set(cardRefs.current[0], { opacity: 1, y: 0, pointerEvents: 'auto' });
 
-    // Create a master GSAP timeline tied to the scroll position
+    // ── Timeline ──────────────────────────────────────────────────────────────
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: el,
-        start: 'top top',
-        end: `+=${TOTAL * 120}vh`, // Pinned duration: 120vh per card provides a great balance of reading time and smooth scrolling
-        pin: true,
+        trigger:   el,
+        start:     'top top',
+        end:       `+=${TOTAL * 110}vh`,
+        pin:       true,
         pinSpacing: true,
-        scrub: 1.5, // 1.5 seconds of smoothing for buttery floaty effect
-        onUpdate: (self) => {
-          // Total timeline duration calculation
-          const totalDuration = (TOTAL - 1) * 2 + 1.5;
-          const currentTime = self.progress * totalDuration;
-          
-          // Each card transition happens at multiples of 2.
-          // By adding 0.5, the active index switches exactly when the crossfade begins.
-          const idx = Math.min(Math.floor((currentTime + 0.5) / 2), TOTAL - 1);
+        scrub:     1,                       // 1 s smoothing — buttery not laggy
+        onUpdate(self) {
+          // Map progress → active index.
+          // Each card "owns" 1/(TOTAL) of the timeline.
+          // Clamp to avoid overshooting last card.
+          const idx = Math.min(
+            Math.floor(self.progress * TOTAL),
+            TOTAL - 1
+          );
           setActive(idx);
-        }
-      }
+        },
+      },
     });
 
-    // Build the crossfade animation sequence with PAUSES for reading
-    cardRefs.current.forEach((card, i) => {
-      // Set initial states
-      if (i === 0) {
-        gsap.set(card, { opacity: 1, y: 0 });
-      } else {
-        gsap.set(card, { opacity: 0, y: 40 });
-      }
+    // ── Build sequence ────────────────────────────────────────────────────────
+    // Card i lives at timeline position [i*2, i*2+2].
+    // Crossfade: card i fades out over [i*2, i*2+1],
+    //            card i+1 fades in over [i*2+0.4, i*2+1.4] (0.4 overlap).
+    for (let i = 0; i < TOTAL - 1; i++) {
+      const pos = i * 2 * UNIT;
 
-      const startTime = i * 2;
-      
-      // If not the first card, it needs to fade in
-      if (i > 0) {
-        tl.to(card, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, startTime - 0.5);
-      }
+      // Fade OUT current card (translate up slightly — no scale)
+      tl.to(cardRefs.current[i], {
+        opacity:       0,
+        y:            -40,
+        pointerEvents: 'none',
+        duration:      UNIT,
+        ease:          'power2.inOut',
+      }, pos);
 
-      // If not the last card, it needs to fade out AFTER a 1.5s pause
-      if (i < TOTAL - 1) {
-        tl.to(card, { opacity: 0, y: -40, duration: 0.5, ease: 'power2.in' }, startTime + 1.5);
-      }
-    });
+      // Fade IN next card (translate from below — no scale)
+      tl.fromTo(
+        cardRefs.current[i + 1],
+        { opacity: 0, y: 50, pointerEvents: 'none' },
+        {
+          opacity:       1,
+          y:             0,
+          pointerEvents: 'auto',
+          duration:      UNIT,
+          ease:          'power2.inOut',
+        },
+        pos + UNIT * 0.4   // 40% overlap → smooth crossfade without flicker
+      );
+    }
 
-    // Add a pause at the very end so the last card lingers before unpinning
-    tl.to({}, { duration: 1.5 });
+    // Hold last card
+    tl.to({}, { duration: UNIT * 2 });
 
     return () => {
       tl.scrollTrigger?.kill();
@@ -131,33 +151,60 @@ export default function ManifestoCards() {
     };
   }, []);
 
-  const item = manifesto[active] || manifesto[0];
+  const activeColor = manifesto[active]?.color ?? '#ffffff';
 
   return (
     <div
       ref={sectionRef}
       style={{
-        position: 'relative',
-        width: '100%',
-        height: '100vh',
-        background: 'var(--color-bg-deep)',
-        overflow: 'hidden',
-        userSelect: 'none',
-        borderTop: '1px solid var(--color-border)',
-        transition: 'background-color 0.8s ease',
+        position:        'relative',
+        width:           '100%',
+        height:          '100vh',
+        backgroundColor: '#050507',
+        overflow:        'hidden',
+        fontFamily:      "'Inter', sans-serif",
       }}
     >
-      {/* Subtle color wash behind active card */}
-      <div style={{
-        position: 'absolute',
-        inset: 0,
-        background: `radial-gradient(ellipse 60% 50% at 50% 50%, ${item.color}12 0%, transparent 70%)`,
-        transition: 'background 0.8s ease',
-        pointerEvents: 'none',
-      }} />
+      {/* ── Dynamic Glow Orb ────────────────────────────────────────────────── */}
+      <div
+        style={{
+          position:   'absolute',
+          top:        '50%',
+          left:       '50%',
+          width:      '60vw',
+          height:     '60vw',
+          transform:  'translate(-50%, -50%)',
+          background: `radial-gradient(circle, ${activeColor}22 0%, transparent 60%)`,
+          filter:     'blur(100px)',
+          transition: 'background 0.8s ease',
+          pointerEvents: 'none',
+          zIndex:     0,
+        }}
+      />
 
-      {/* Cards Container */}
-      <div style={{ position: 'absolute', inset: 0 }}>
+      {/* ── Noise Overlay ───────────────────────────────────────────────────── */}
+      <div
+        style={{
+          position:        'absolute',
+          inset:           0,
+          opacity:         0.03,
+          pointerEvents:   'none',
+          zIndex:          1,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* ── Cards ───────────────────────────────────────────────────────────── */}
+      <div
+        style={{
+          position:        'absolute',
+          inset:           0,
+          display:         'flex',
+          alignItems:      'center',
+          justifyContent:  'center',
+          zIndex:          2,
+        }}
+      >
         {manifesto.map((m, i) => {
           const Icon = m.icon;
           return (
@@ -165,204 +212,149 @@ export default function ManifestoCards() {
               key={i}
               ref={(el) => (cardRefs.current[i] = el)}
               style={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
+                position:   'absolute',
+                width:      'min(1100px, 90vw)',
+                height:     'min(650px, 80vh)',
+                display:    'flex',
+                gap:        'clamp(2rem, 4vw, 4rem)',
                 alignItems: 'center',
-                justifyContent: 'center',
-                pointerEvents: i === active ? 'auto' : 'none', // Only active card is clickable
-                willChange: 'opacity, transform',
+                willChange: 'transform, opacity',
               }}
             >
-              <div style={{ 
-                width: 'min(1100px, 92vw)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'clamp(3rem, 6vw, 8rem)',
-                justifyContent: 'space-between',
-              }}>
-                {/* Photo Left */}
-                <div style={{
-                  flex: '0 0 42%',
-                  aspectRatio: '3/4',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  border: `1px solid ${m.color}30`,
-                  boxShadow: `0 20px 60px ${m.color}15`,
-                  position: 'relative'
-                }}>
-                  {/* Robust image rendering */}
-                  <img 
-                    src={m.image} 
-                    alt={m.title}
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      zIndex: 0
-                    }}
-                  />
-                  {/* Subtle gradient overlay to match accent color */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    background: `linear-gradient(to top, ${m.color}50, transparent)`,
-                    mixBlendMode: 'overlay'
-                  }} />
-                  {/* Inner glow */}
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    boxShadow: `inset 0 0 100px ${m.color}20`,
-                    pointerEvents: 'none'
-                  }} />
-                </div>
-
-                {/* Content Right */}
-                <div style={{ flex: '1', minWidth: '0' }}>
-                  {/* Color accent line */}
-                  <div style={{
-                    height: '4px',
-                    width: '60px',
+              {/* Glass text panel */}
+              <div
+                style={{
+                  flex:                '1',
+                  padding:             '3.5rem',
+                  background:          'rgba(20, 20, 25, 0.4)',
+                  backdropFilter:      'blur(30px)',
+                  WebkitBackdropFilter:'blur(30px)',
+                  borderTop:          `1px solid ${m.color}30`,
+                  borderLeft:         `1px solid ${m.color}15`,
+                  borderBottom:        '1px solid rgba(255,255,255,0.02)',
+                  borderRight:         '1px solid rgba(255,255,255,0.02)',
+                  borderRadius:        '24px',
+                  boxShadow:          `0 30px 60px -10px rgba(0,0,0,0.8), inset 0 0 40px ${m.color}05`,
+                }}
+              >
+                {/* Accent line */}
+                <div
+                  style={{
+                    height:     '2px',
+                    width:      '40px',
                     background: m.color,
-                    marginBottom: '3rem',
-                    borderRadius: '2px',
-                  }} />
+                    marginBottom: '2rem',
+                    boxShadow:  `0 0 15px ${m.color}`,
+                  }}
+                />
 
-                  {/* Label + number */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
+                {/* Label row */}
+                <div
+                  style={{
+                    display:      'flex',
+                    alignItems:   'center',
+                    gap:          '12px',
                     marginBottom: '1.5rem',
-                  }}>
-                    <span style={{
-                      fontSize: '0.8rem',
+                  }}
+                >
+                  <Icon size={20} color={m.color} strokeWidth={1.5} />
+                  <span
+                    style={{
+                      fontSize:      '0.85rem',
                       letterSpacing: '0.25em',
                       textTransform: 'uppercase',
-                      color: m.color,
-                      fontFamily: 'var(--font-mono, monospace)',
-                    }}>{m.label}</span>
-                    <span style={{
-                      fontSize: '0.75rem',
-                      color: 'var(--color-text-muted)',
-                      fontFamily: 'var(--font-mono, monospace)',
-                      letterSpacing: '0.15em',
-                    }}>{String(i + 1).padStart(2,'0')} / {String(manifesto.length).padStart(2,'0')}</span>
-                  </div>
-
-                  {/* Title */}
-                  <h2 style={{
-                    fontSize: 'clamp(3rem, 5.5vw, 5rem)',
-                    fontWeight: 700,
-                    color: 'var(--color-text-luxury)',
-                    letterSpacing: '-0.04em',
-                    lineHeight: 1.05,
-                    marginBottom: '2rem',
-                    fontFamily: "'Georgia', var(--font-heading, serif)",
-                  }}>{m.title}</h2>
-
-                  {/* Body */}
-                  <p style={{
-                    fontSize: 'clamp(1.1rem, 1.3vw, 1.4rem)',
-                    color: 'var(--color-text-secondary)',
-                    lineHeight: 1.8,
-                    fontWeight: 400,
-                    margin: 0,
-                    maxWidth: '100%',
-                  }}>{m.body}</p>
-
-                  {/* Icon chip */}
-                  <div style={{
-                    marginTop: '3rem',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '10px 18px',
-                    border: `1px solid ${m.color}30`,
-                    background: `${m.color}08`,
-                    borderRadius: '8px',
-                  }}>
-                    <Icon size={18} color={m.color} />
-                    <span style={{
-                      fontSize: '0.8rem',
-                      color: m.color,
-                      fontFamily: 'var(--font-mono, monospace)',
-                      letterSpacing: '0.15em',
-                      fontWeight: 500,
-                    }}>{m.label.toUpperCase()}</span>
-                  </div>
+                      color:         m.color,
+                      fontWeight:    600,
+                    }}
+                  >
+                    {m.label}
+                  </span>
                 </div>
+
+                {/* Title */}
+                <h2
+                  style={{
+                    fontSize:      'clamp(2.5rem, 4vw, 4.5rem)',
+                    fontWeight:    700,
+                    color:         '#ffffff',
+                    letterSpacing: '-0.02em',
+                    lineHeight:    1.1,
+                    marginBottom:  '2rem',
+                  }}
+                >
+                  {m.title}
+                </h2>
+
+                {/* Body */}
+                <p
+                  style={{
+                    fontSize:   'clamp(1.05rem, 1.2vw, 1.25rem)',
+                    color:      'rgba(255, 255, 255, 0.65)',
+                    lineHeight: 1.8,
+                    fontWeight: 300,
+                    margin:     0,
+                  }}
+                >
+                  {m.body}
+                </p>
+              </div>
+
+              {/* Image panel */}
+              <div
+                style={{
+                  flex:         '1',
+                  height:       '85%',
+                  borderRadius: '24px',
+                  overflow:     'hidden',
+                  position:     'relative',
+                  boxShadow:    '0 20px 50px rgba(0,0,0,0.5)',
+                }}
+              >
+                <div
+                  style={{
+                    position:     'absolute',
+                    inset:        0,
+                    background:  `linear-gradient(to top right, ${m.color}30 0%, transparent 100%)`,
+                    mixBlendMode: 'overlay',
+                    zIndex:       1,
+                  }}
+                />
+                <img
+                  src={m.image}
+                  alt={m.title}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Left: vertical dots */}
-      <div style={{
-        position: 'absolute',
-        left: '3vw',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px',
-        zIndex: 10,
-      }}>
+      {/* ── Progress dots ────────────────────────────────────────────────────── */}
+      <div
+        style={{
+          position:  'absolute',
+          bottom:    '40px',
+          left:      '50%',
+          transform: 'translateX(-50%)',
+          display:   'flex',
+          gap:       '12px',
+          zIndex:    10,
+        }}
+      >
         {manifesto.map((m, i) => (
           <div
             key={i}
             style={{
-              width: active === i ? '20px' : '6px',
-              height: '3px',
-              borderRadius: '2px',
-              background: active >= i ? m.color : 'var(--color-border)',
-              transition: 'all 0.4s cubic-bezier(0.25,1,0.5,1)',
+              width:      active === i ? '32px' : '8px',
+              height:     '4px',
+              borderRadius: '4px',
+              background: active === i ? m.color : 'rgba(255,255,255,0.15)',
+              boxShadow:  active === i ? `0 0 10px ${m.color}80` : 'none',
+              transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
             }}
           />
         ))}
-      </div>
-
-      {/* Right: vertical label */}
-      <div style={{
-        position: 'absolute',
-        right: '3vw',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        writingMode: 'vertical-rl',
-        fontSize: '0.65rem',
-        letterSpacing: '0.3em',
-        textTransform: 'uppercase',
-        color: item.color,
-        fontFamily: 'var(--font-mono, monospace)',
-        transition: 'color 0.5s ease',
-        opacity: 0.7,
-        zIndex: 10,
-      }}>
-        {item.label}
-      </div>
-
-      {/* Bottom: scroll hint */}
-      <div style={{
-        position: 'absolute',
-        bottom: '3vh',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        display: 'flex',
-        alignItems: 'center',
-        zIndex: 10,
-      }}>
-        <span style={{
-          fontSize: '0.65rem',
-          fontFamily: 'var(--font-mono, monospace)',
-          color: 'var(--color-text-muted)',
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase'
-        }}>Keep Scrolling ↓</span>
       </div>
     </div>
   );

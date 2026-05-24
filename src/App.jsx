@@ -90,10 +90,19 @@ function MainSite() {
 
   // Form submission state
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { name, email, message } = formData;
+    const text = `${message}`;
+    const whatsappUrl = `https://wa.me/917425010784?text=${encodeURIComponent(text)}`;
+    window.open(whatsappUrl, '_blank');
     setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 5000);
+    setTimeout(() => {
+      setFormSubmitted(false);
+      setFormData({ name: '', email: '', message: '' });
+    }, 5000);
   };
 
   return (
@@ -365,6 +374,8 @@ function MainSite() {
                         required 
                         type="text" 
                         className="interactive"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         style={{ 
                           background: 'var(--color-input-bg)', 
                           border: '1px solid var(--color-input-border)', 
@@ -386,6 +397,8 @@ function MainSite() {
                         required 
                         type="email" 
                         className="interactive"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         style={{ 
                           background: 'var(--color-input-bg)', 
                           border: '1px solid var(--color-input-border)', 
@@ -407,6 +420,8 @@ function MainSite() {
                         required 
                         rows={4} 
                         className="interactive"
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         style={{ 
                           background: 'var(--color-input-bg)', 
                           border: '1px solid var(--color-input-border)', 
@@ -467,8 +482,16 @@ function MainSite() {
 }
 
 export default function App() {
-  const [assetsLoaded, setAssetsLoaded] = useState(false);
-  const [introFinished, setIntroFinished] = useState(false);
+  // Check if intro was already played this session (i.e. this is a normal reload, not a hard reset)
+  const hasPlayedIntro = sessionStorage.getItem('storyIntroPlayed');
+
+  const [assetsLoaded, setAssetsLoaded] = useState(hasPlayedIntro ? true : false);
+  const [introFinished, setIntroFinished] = useState(hasPlayedIntro ? true : false);
+
+  // Scroll to top on normal reload
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
