@@ -12,6 +12,7 @@ import IllusionSkills from './components/Skills/IllusionSkills';
 import ManifestoCards from './components/Manifesto/ManifestoCards';
 import { ThemeProvider } from './ThemeContext';
 import { useTheme } from './useTheme';
+import AuraPicker from './components/AuraPicker/AuraPicker';
 import { Sparkles, Send, ArrowDown, Mail, MapPin, Sun, Moon } from 'lucide-react';
 
 // ====== THEME TOGGLE BUTTON COMPONENT ======
@@ -527,6 +528,7 @@ export default function App() {
                style={{ position: 'relative', zIndex: 5 }}
              >
                 <ThemeToggle />
+                <AuraPicker />
                 <MainSite />
              </motion.div>
           )}

@@ -5,6 +5,7 @@
   --color-bg-deep: #050b14;
   --color-bg-surface: #0e1a2f;
   --color-accent-light: #e2e8f0;
+  --color-accent-glow: #a8c0ff;
   --color-accent-base: #3b82f6;
   --color-accent-dark: #1d4ed8;
   --color-text-luxury: #f8fafc;
@@ -45,6 +46,7 @@
   --color-bg-deep: #f0f4f8;
   --color-bg-surface: #ffffff;
   --color-accent-light: #334155;
+  --color-accent-glow: #1e40af;
   --color-accent-base: #2563eb;
   --color-accent-dark: #1e40af;
   --color-text-luxury: #0f172a;
@@ -70,6 +72,70 @@
   --color-step-3-glow: rgba(126, 34, 206, 0.15);
   --color-step-4: #be185d;
   --color-step-4-glow: rgba(190, 24, 93, 0.15);
+}
+
+/* ============ AURAS ============ */
+[data-aura="emerald"] {
+  --color-accent-base: #10b981;
+  --color-accent-dark: #047857;
+  --color-accent-glow: #6ee7b7;
+  --color-card-spotlight: rgba(16, 185, 129, 0.08);
+  --color-border-hover: rgba(16, 185, 129, 0.25);
+  --color-tag-bg: rgba(16, 185, 129, 0.1);
+  --color-tag-text: rgba(110, 231, 183, 0.9);
+  --color-tag-border: rgba(16, 185, 129, 0.15);
+}
+[data-theme="light"][data-aura="emerald"] {
+  --color-accent-base: #059669;
+  --color-accent-dark: #047857;
+  --color-accent-glow: #059669;
+  --color-card-spotlight: rgba(5, 150, 105, 0.1);
+  --color-border-hover: #059669;
+  --color-tag-bg: rgba(5, 150, 105, 0.08);
+  --color-tag-text: #047857;
+  --color-tag-border: rgba(5, 150, 105, 0.18);
+}
+
+[data-aura="crimson"] {
+  --color-accent-base: #f43f5e;
+  --color-accent-dark: #be123c;
+  --color-accent-glow: #fda4af;
+  --color-card-spotlight: rgba(244, 63, 94, 0.08);
+  --color-border-hover: rgba(244, 63, 94, 0.25);
+  --color-tag-bg: rgba(244, 63, 94, 0.1);
+  --color-tag-text: rgba(253, 164, 175, 0.9);
+  --color-tag-border: rgba(244, 63, 94, 0.15);
+}
+[data-theme="light"][data-aura="crimson"] {
+  --color-accent-base: #e11d48;
+  --color-accent-dark: #be123c;
+  --color-accent-glow: #e11d48;
+  --color-card-spotlight: rgba(225, 29, 72, 0.1);
+  --color-border-hover: #e11d48;
+  --color-tag-bg: rgba(225, 29, 72, 0.08);
+  --color-tag-text: #be123c;
+  --color-tag-border: rgba(225, 29, 72, 0.18);
+}
+
+[data-aura="violet"] {
+  --color-accent-base: #8b5cf6;
+  --color-accent-dark: #6d28d9;
+  --color-accent-glow: #c4b5fd;
+  --color-card-spotlight: rgba(139, 92, 246, 0.08);
+  --color-border-hover: rgba(139, 92, 246, 0.25);
+  --color-tag-bg: rgba(139, 92, 246, 0.1);
+  --color-tag-text: rgba(196, 181, 253, 0.9);
+  --color-tag-border: rgba(139, 92, 246, 0.15);
+}
+[data-theme="light"][data-aura="violet"] {
+  --color-accent-base: #7c3aed;
+  --color-accent-dark: #5b21b6;
+  --color-accent-glow: #7c3aed;
+  --color-card-spotlight: rgba(124, 58, 237, 0.1);
+  --color-border-hover: #7c3aed;
+  --color-tag-bg: rgba(124, 58, 237, 0.08);
+  --color-tag-text: #5b21b6;
+  --color-tag-border: rgba(124, 58, 237, 0.18);
 }
 
 * {
@@ -110,14 +176,14 @@ a, button {
 
 /* Text Gradients */
 .text-gradient-luxury {
-  background: linear-gradient(135deg, var(--color-text-luxury) 30%, #a8c0ff 70%, var(--color-accent-base) 100%);
+  background: linear-gradient(135deg, var(--color-text-luxury) 30%, var(--color-accent-glow) 70%, var(--color-accent-base) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 [data-theme="light"] .text-gradient-luxury {
-  background: linear-gradient(135deg, #0f172a 30%, #1e40af 70%, #2563eb 100%);
+  background: linear-gradient(135deg, #0f172a 30%, var(--color-accent-glow) 70%, var(--color-accent-base) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
