@@ -10,8 +10,9 @@ import ScrollRevealText from './components/Intro/ScrollRevealText';
 import AppleCard from './components/Cards/AppleCard';
 import IllusionSkills from './components/Skills/IllusionSkills';
 import ManifestoCards from './components/Manifesto/ManifestoCards';
-import { ThemeProvider, useTheme } from './ThemeContext';
-import { Sparkles, Cpu, Layers, Activity, Send, Compass, ArrowDown, ChevronRight, Mail, MapPin, Sun, Moon } from 'lucide-react';
+import { ThemeProvider } from './ThemeContext';
+import { useTheme } from './useTheme';
+import { Sparkles, Send, ArrowDown, Mail, MapPin, Sun, Moon } from 'lucide-react';
 
 // ====== THEME TOGGLE BUTTON COMPONENT ======
 function ThemeToggle() {

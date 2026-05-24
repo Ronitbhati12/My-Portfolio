@@ -36,9 +36,12 @@ export default function StoryIntro({ onComplete }) {
     return sessionStorage.getItem('storyIntroPlayed') ? 4 : 1;
   });
   const [typewriterText, setTypewriterText] = useState('');
+  const shouldSkipIntro = phase === 4;
 
   const fullText = "See how boring this looks? ... no life. Let's add some frontend magic. ✦";
 
+
+  void fullText;
 
   // For 3D Tilt Effect
   const mouseX = useMotionValue(0);
@@ -56,12 +59,12 @@ export default function StoryIntro({ onComplete }) {
   };
 
   useEffect(() => {
-    sessionStorage.setItem('storyIntroPlayed', 'true');
-
     let timer1, timer2, timer3, typeTimeout;
     let isCancelled = false;
 
-    if (phase === 4) return;
+    if (shouldSkipIntro) return;
+
+    sessionStorage.setItem('storyIntroPlayed', 'true');
 
     // Phase 1 -> 2
     timer1 = setTimeout(() => {
@@ -132,7 +135,7 @@ export default function StoryIntro({ onComplete }) {
       clearTimeout(timer3);
       clearTimeout(typeTimeout);
     };
-  }, []);
+  }, [shouldSkipIntro]);
 
   return (
     <div

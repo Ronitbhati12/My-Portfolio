@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 
 export default function AppleCard({ children, className = '', style = {}, tilt = true, glow = true }) {
   const cardRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
 
   // Mouse positions for 3D tilt
   const x = useMotionValue(0);
@@ -38,12 +37,7 @@ export default function AppleCard({ children, className = '', style = {}, tilt =
     }
   };
 
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
   const handleMouseLeave = () => {
-    setIsHovered(false);
     if (tilt) {
       x.set(0);
       y.set(0);
@@ -61,7 +55,6 @@ export default function AppleCard({ children, className = '', style = {}, tilt =
       <motion.div
         ref={cardRef}
         onMouseMove={handleMouseMove}
-        onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{
           rotateX: tilt ? rotateX : 0,

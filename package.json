@@ -1,7 +1,22 @@
 {
-  "name": "new-folder",
+  "name": "my-portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Cinematic React portfolio experience for frontend developer Ronit Bhati.",
+  "author": "Ronit Bhati",
+  "keywords": [
+    "portfolio",
+    "react",
+    "vite",
+    "framer-motion",
+    "gsap",
+    "threejs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ronitbhati12/My-Portfolio.git"
+  },
+  "homepage": "https://github.com/Ronitbhati12/My-Portfolio",
   "type": "module",
   "scripts": {
     "dev": "vite",

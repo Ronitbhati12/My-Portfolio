@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Compass, Cpu, Layers, Activity, Zap, Globe } from 'lucide-react';
 
@@ -9,7 +9,7 @@ const skills = [
     tag: "Component architecture",
     color: "#3b82f6", // Blue
     icon: <Compass size={24} color="#3b82f6" />,
-    doodle: "/doodles/react.png"
+    doodle: "/doodles/react.svg"
   },
   {
     title: "Pixel-Perfect UI",
@@ -17,7 +17,7 @@ const skills = [
     tag: "Responsive design",
     color: "#fbbf24", // Gold
     icon: <Cpu size={24} color="#fbbf24" />,
-    doodle: "/doodles/responsive.png"
+    doodle: "/doodles/responsive.svg"
   },
   {
     title: "Clean Workflow",
@@ -25,7 +25,7 @@ const skills = [
     tag: "Git & GitHub",
     color: "#a855f7", // Purple
     icon: <Layers size={24} color="#a855f7" />,
-    doodle: "/doodles/git.png"
+    doodle: "/doodles/git.svg"
   },
   {
     title: "Builder Mindset",
@@ -33,7 +33,7 @@ const skills = [
     tag: "C / C++ / Python",
     color: "#ec4899", // Pink
     icon: <Activity size={24} color="#ec4899" />,
-    doodle: "/doodles/programming.png"
+    doodle: "/doodles/programming.svg"
   },
   {
     title: "Motion & Animation",
@@ -41,7 +41,7 @@ const skills = [
     tag: "Framer Motion / GSAP",
     color: "#06b6d4", // Cyan
     icon: <Zap size={24} color="#06b6d4" />,
-    doodle: "/doodles/motion.png"
+    doodle: "/doodles/motion.svg"
   },
   {
     title: "API Integration",
@@ -49,7 +49,7 @@ const skills = [
     tag: "REST / Fetch / Axios",
     color: "#10b981", // Emerald
     icon: <Globe size={24} color="#10b981" />,
-    doodle: "/doodles/api.png"
+    doodle: "/doodles/api.svg"
   }
 ];
 
